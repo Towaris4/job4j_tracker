@@ -27,5 +27,6 @@ public class Error {
         error1.errorInfo();
         error2.errorInfo();
         error3.errorInfo();
+
     }
 }
