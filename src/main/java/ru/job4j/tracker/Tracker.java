@@ -23,12 +23,12 @@ public class Tracker {
     }
 
     public Item[] findByName(String key) {
-        Item[] result = new Item[this.size];
-        int size = 0;
-        for (int index = 0; index < this.size; index++) {
+        Item[] result = new Item[size];
+        int count = 0;
+        for (int index = 0; index < size; index++) {
             if (items[index].getName().equals(key)) {
                 result[size] = items[index];
-                size++;
+                count++;
             }
         }
         return Arrays.copyOf(result, size);
