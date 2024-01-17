@@ -1,6 +1,6 @@
 package ru.job4j.oop;
 
-public class Student {
+public class Student extends Freshman {
     public void sing() {
         System.out.println("I believe I can fly");
     }
