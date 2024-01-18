@@ -1,7 +1,7 @@
 package ru.job4j.polymorphism;
 
 public class Bus implements Transport {
-    int passengers = 0;
+    private int passengers = 0;
 
     @Override
     public void passengers(int passenger) {
