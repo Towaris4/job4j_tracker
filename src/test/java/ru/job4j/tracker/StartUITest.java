@@ -36,7 +36,6 @@ import static org.assertj.core.api.Assertions.assertThat;
             tracker.add(item);
             String[] answers = {
                     String.valueOf(item.getId()),
-                    "edited item"
             };
             StartUI.deleteItem(new MockInput(answers), tracker);
             Item edited = tracker.findById(item.getId());
