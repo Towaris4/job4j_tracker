@@ -38,5 +38,4 @@ public final class SingleTracker {
     public void delete(int id) {
         tracker.delete(id);
     }
-
 }
