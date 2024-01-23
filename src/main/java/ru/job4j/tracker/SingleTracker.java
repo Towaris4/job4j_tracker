@@ -8,6 +8,9 @@ public final class SingleTracker {
 
     private static SingleTracker instance = null;
 
+    private SingleTracker() {
+    }
+
     public static SingleTracker getInstance() {
         if (instance == null) {
             instance = new SingleTracker();
