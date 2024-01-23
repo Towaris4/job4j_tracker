@@ -64,26 +64,26 @@ public class PasswordValidator {
                 return password;
             }
         }
-            if (!hasUpCase) {
-                throw new IllegalArgumentException(
-                        "Password should contain at least one uppercase letter"
-                );
-            }
-            if (!hasLowCase) {
-                throw new IllegalArgumentException(
-                        "Password should contain at least one lowercase letter"
-                );
-            }
-            if (!hasDigit) {
-                throw new IllegalArgumentException(
-                        "Password should contain at least one figure"
-                );
-            }
-            if (!hasSpecial) {
-                throw new IllegalArgumentException(
-                        "Password should contain at least one special symbol"
-                );
-            }
+        if (!hasUpCase) {
+            throw new IllegalArgumentException(
+                    "Password should contain at least one uppercase letter"
+            );
+        }
+        if (!hasLowCase) {
+            throw new IllegalArgumentException(
+                    "Password should contain at least one lowercase letter"
+            );
+        }
+        if (!hasDigit) {
+            throw new IllegalArgumentException(
+                    "Password should contain at least one figure"
+            );
+        }
+        if (!hasSpecial) {
+            throw new IllegalArgumentException(
+                    "Password should contain at least one special symbol"
+            );
+        }
         return password;
     }
 }
