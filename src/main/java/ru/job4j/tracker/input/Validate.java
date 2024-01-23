@@ -25,7 +25,7 @@ public class Validate implements Input {
                 value = input.askInt(question);
                 invalid = false;
             } catch (NumberFormatException nfe) {
-                System.out.println("Пожалуйста, введите корректные данные");
+                output.println("Пожалуйста, введите корректные данные");
             }
         } while (invalid);
         return value;
