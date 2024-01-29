@@ -16,9 +16,6 @@ public class ConvertList2Array {
                 row++;
                 cell = 0;
             }
-            if (row >= groups) {
-                break;
-            }
         }
         return array;
     }
