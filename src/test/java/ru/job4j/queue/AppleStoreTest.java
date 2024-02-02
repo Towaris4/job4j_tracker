@@ -9,6 +9,7 @@ import java.util.Queue;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AppleStoreTest {
+
     @Test
     void whenGetLast() {
         Queue<Customer> customers = new LinkedList<>();
@@ -24,7 +25,6 @@ class AppleStoreTest {
         String customer = appleStore.getLastHappyCustomer();
         assertThat(customer).isEqualTo("Alexei");
     }
-
 
     @Test
     void whenGetFirst() {
