@@ -32,10 +32,8 @@ public class AnalyzeByMap {
         List<Label> result = new ArrayList<>();
         for (Pupil pupil : pupils) {
             for (Subject subject : pupil.subjects()) {
-                int scoreSubject = scoreBySubject.getOrDefault(subject.name(), 0);
-                String nameSubject = subject.name();
-                scoreSubject += subject.score();
-                scoreBySubject.put(nameSubject, scoreSubject);
+                scoreBySubject.put(subject.name(),
+                        scoreBySubject.getOrDefault(subject.name(), 0) + subject.score());
             }
         }
         for (String nameSubject : scoreBySubject.keySet()) {
@@ -54,26 +52,34 @@ public class AnalyzeByMap {
             }
             scoreByPupil.add(new Label(pupil.name(), score));
         }
-        scoreByPupil.sort(Comparator.naturalOrder());
-        return scoreByPupil.get(scoreByPupil.size() - 1);
+        Label result = new Label(null, 0);
+        for (Label label : scoreByPupil) {
+            if (label.compareTo(result) > 0) {
+                result = label;
+            }
+        }
+        return result;
     }
 
     public static Label bestSubject(List<Pupil> pupils) {
         Map<String, Integer> scoreBySubject = new LinkedHashMap<>();
-        List<Label> result = new ArrayList<>();
+        List<Label> labels = new ArrayList<>();
         for (Pupil pupil : pupils) {
-            for (Subject subject : pupil.subjects()) {
-                int scoreSubject = scoreBySubject.getOrDefault(subject.name(), 0);
-                String nameSubject = subject.name();
-                scoreSubject += subject.score();
-                scoreBySubject.put(nameSubject, scoreSubject);
+                for (Subject subject : pupil.subjects()) {
+                    scoreBySubject.put(subject.name(),
+                            scoreBySubject.getOrDefault(subject.name(), 0) + subject.score());
             }
         }
         for (String nameSubject : scoreBySubject.keySet()) {
             int score = scoreBySubject.get(nameSubject);
-            result.add(new Label(nameSubject, score));
+            labels.add(new Label(nameSubject, score));
         }
-        result.sort(Comparator.naturalOrder());
-        return result.get(result.size() - 1);
+        Label result = new Label(null, 0);
+        for (Label label : labels) {
+            if (label.compareTo(result) > 0) {
+                result = label;
+            }
+        }
+        return result;
     }
 }
