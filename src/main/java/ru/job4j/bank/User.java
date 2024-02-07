@@ -1,7 +1,12 @@
 package ru.job4j.bank;
 
 import java.util.Objects;
-
+/**
+ * Класс описывает модель пользователя банка.
+ * Эта модель содержит поля: номер паспорта и ФИО.
+ * @author Ivan Tarasov
+ * @version 0.1
+ */
 public class User {
     private String passport;
     private String username;
