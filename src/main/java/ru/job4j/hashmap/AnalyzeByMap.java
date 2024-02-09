@@ -30,12 +30,8 @@ public class AnalyzeByMap {
     public static List<Label> averageScoreBySubject(List<Pupil> pupils) {
         Map<String, Integer> scoreBySubject = new LinkedHashMap<>();
         List<Label> result = new ArrayList<>();
-        for (Pupil pupil : pupils) {
-            for (Subject subject : pupil.subjects()) {
-                scoreBySubject.put(subject.name(),
-                        scoreBySubject.getOrDefault(subject.name(), 0) + subject.score());
-            }
-        }
+        pupils.forEach(pupil -> pupil.subjects().forEach(subject ->
+                scoreBySubject.merge(subject.name(), subject.score(), Integer::sum)));
         for (String nameSubject : scoreBySubject.keySet()) {
             int score = scoreBySubject.get(nameSubject) /  pupils.size();
             result.add(new Label(nameSubject, score));
@@ -45,6 +41,9 @@ public class AnalyzeByMap {
 
     public static Label bestStudent(List<Pupil> pupils) {
         List<Label> scoreByPupil = new ArrayList<>();
+        Map<String, Integer> scoreBySubject = new LinkedHashMap<>();
+        pupils.forEach(pupil -> pupil.subjects().forEach(subject ->
+                scoreBySubject.merge(subject.name(), subject.score(), Integer::sum)));
         for (Pupil pupil : pupils) {
             double score = 0;
             for (Subject subject : pupil.subjects()) {
@@ -64,12 +63,8 @@ public class AnalyzeByMap {
     public static Label bestSubject(List<Pupil> pupils) {
         Map<String, Integer> scoreBySubject = new LinkedHashMap<>();
         List<Label> labels = new ArrayList<>();
-        for (Pupil pupil : pupils) {
-                for (Subject subject : pupil.subjects()) {
-                    scoreBySubject.put(subject.name(),
-                            scoreBySubject.getOrDefault(subject.name(), 0) + subject.score());
-            }
-        }
+        pupils.forEach(pupil -> pupil.subjects().forEach(subject ->
+                scoreBySubject.merge(subject.name(), subject.score(), Integer::sum)));
         for (String nameSubject : scoreBySubject.keySet()) {
             int score = scoreBySubject.get(nameSubject);
             labels.add(new Label(nameSubject, score));
