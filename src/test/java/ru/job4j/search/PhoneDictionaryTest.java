@@ -13,7 +13,7 @@ public class PhoneDictionaryTest {
         phones.add(
                 new Person("Petr", "Arsentev", "534872", "Bryansk")
         );
-        ArrayList<Person> persons = phones.find("Petr");
+        var persons = phones.find("Petr");
         assertThat(persons.get(0).getSurname()).isEqualTo("Arsentev");
     }
 
@@ -23,7 +23,7 @@ public class PhoneDictionaryTest {
         phones.add(
                 new Person("Petr", "Arsentev", "534872", "Bryansk")
         );
-        ArrayList<Person> persons = phones.find("1234");
+        var persons = phones.find("1234");
         assertThat(persons).isEmpty();
     }
 
@@ -33,7 +33,7 @@ public class PhoneDictionaryTest {
         phones.add(
                 new Person("Petr", "Arsentev", "534872", "Bryansk")
         );
-        ArrayList<Person> persons = phones.find("Petr");
+        var persons = phones.find("Petr");
         assertThat(persons.get(0).getSurname()).isEqualTo("Arsentev");
     }
 }
