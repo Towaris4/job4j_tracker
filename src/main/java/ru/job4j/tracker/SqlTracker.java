@@ -1,7 +1,5 @@
 package ru.job4j.tracker;
 
-import ru.job4j.tracker.Item;
-
 import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
@@ -50,16 +48,16 @@ public class SqlTracker implements Store {
             preparedStatement.setTimestamp(1, Timestamp.valueOf(item.getCreated()));
             preparedStatement.execute();
         } catch (SQLException e) {
-            return null;
+            throw new RuntimeException("Failed to add item", e);
         }
         return item;
     }
 
     @Override
     public boolean replace(int id, Item item) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE items\n" +
-                "SET name = ?, created = ?\n" +
-                "WHERE id = ?;")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE items\n"
+                + "SET name = ?, created = ?\n"
+                + "WHERE id = ?;")) {
             preparedStatement.setString(1, item.getName());
             preparedStatement.setTimestamp(1, Timestamp.valueOf(item.getCreated()));
             preparedStatement.setInt(1, id);
@@ -77,6 +75,7 @@ public class SqlTracker implements Store {
             preparedStatement.setInt(1, id);
             preparedStatement.execute();
         } catch (SQLException e) {
+            throw new RuntimeException("Failed to delete item with id: " + id, e);
         }
     }
 
@@ -92,7 +91,8 @@ public class SqlTracker implements Store {
                 item.setCreated(rs.getTimestamp("created").toLocalDateTime());
                 items.add(item);
             }
-        } catch (Exception SQLException) {
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find all: ", e);
         }
         return items;
     }
@@ -110,7 +110,8 @@ public class SqlTracker implements Store {
                 item.setCreated(rs.getTimestamp("created").toLocalDateTime());
                 items.add(item);
             }
-        } catch (Exception SQLException) {
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find by name: " + key, e);
         }
         return items;
     }
@@ -126,7 +127,8 @@ public class SqlTracker implements Store {
                 item.setName(rs.getString("name"));
                 item.setCreated(rs.getTimestamp("created").toLocalDateTime());
             }
-        } catch (Exception SQLException) {
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find by id: " + id, e);
         }
         return item;
     }
