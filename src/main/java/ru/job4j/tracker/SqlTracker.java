@@ -70,8 +70,8 @@ public class SqlTracker implements Store {
 
     @Override
     public void delete(int id) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("DELETE from items\n" +
-                "WHERE id = ?;")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("DELETE from items\n"
+                + "WHERE id = ?;")) {
             preparedStatement.setInt(1, id);
             preparedStatement.execute();
         } catch (SQLException e) {
