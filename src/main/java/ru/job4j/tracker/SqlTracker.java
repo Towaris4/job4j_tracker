@@ -83,13 +83,9 @@ public class SqlTracker implements Store {
     public List<Item> findAll() {
         List<Item> items = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement("select * from items\n");
-        ResultSet rs = preparedStatement.executeQuery()) {
+             ResultSet rs = preparedStatement.executeQuery()) {
             while (rs.next()) {
-                Item item = new Item();
-                item.setId(rs.getInt("id"));
-                item.setName(rs.getString("name"));
-                item.setCreated(rs.getTimestamp("created").toLocalDateTime());
-                items.add(item);
+                items.add(getItem(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find all: ", e);
@@ -102,18 +98,22 @@ public class SqlTracker implements Store {
         List<Item> items = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement("select * from items where name = ?");
              ResultSet rs = preparedStatement.executeQuery()) {
-             preparedStatement.setString(1, key);
+            preparedStatement.setString(1, key);
             while (rs.next()) {
-                Item item = new Item();
-                item.setId(rs.getInt("id"));
-                item.setName(rs.getString("name"));
-                item.setCreated(rs.getTimestamp("created").toLocalDateTime());
-                items.add(item);
+                items.add(getItem(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find by name: " + key, e);
         }
         return items;
+    }
+
+    private Item getItem(ResultSet rs) throws SQLException {
+        Item item = new Item();
+        item.setId(rs.getInt("id"));
+        item.setName(rs.getString("name"));
+        item.setCreated(rs.getTimestamp("created").toLocalDateTime());
+        return item;
     }
 
     @Override
@@ -123,9 +123,7 @@ public class SqlTracker implements Store {
              ResultSet rs = preparedStatement.executeQuery()) {
             preparedStatement.setInt(1, id);
             while (rs.next()) {
-                item.setId(rs.getInt("id"));
-                item.setName(rs.getString("name"));
-                item.setCreated(rs.getTimestamp("created").toLocalDateTime());
+                item = getItem(rs);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find by id: " + id, e);
