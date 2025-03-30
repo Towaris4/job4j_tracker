@@ -43,10 +43,15 @@ public class SqlTracker implements Store {
 
     @Override
     public Item add(Item item) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO items(name,created) values(?, ?)")) {
-            preparedStatement.setString(1, item.getName());
-            preparedStatement.setTimestamp(1, Timestamp.valueOf(item.getCreated()));
-            preparedStatement.execute();
+        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO items(name,created) values(?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, item.getName());
+            ps.setTimestamp(2, Timestamp.valueOf(item.getCreated()));
+            ps.execute();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    item.setId(rs.getInt(1));
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to add item", e);
         }
@@ -59,13 +64,14 @@ public class SqlTracker implements Store {
                 + "SET name = ?, created = ?\n"
                 + "WHERE id = ?;")) {
             preparedStatement.setString(1, item.getName());
-            preparedStatement.setTimestamp(1, Timestamp.valueOf(item.getCreated()));
-            preparedStatement.setInt(1, id);
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(item.getCreated()));
+            preparedStatement.setInt(3, id);
             preparedStatement.execute();
+            int updatedRows = preparedStatement.executeUpdate();
+            return updatedRows > 0;
         } catch (SQLException e) {
             return false;
         }
-        return true;
     }
 
     @Override
@@ -96,11 +102,12 @@ public class SqlTracker implements Store {
     @Override
     public List<Item> findByName(String key) {
         List<Item> items = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from items where name = ?");
-             ResultSet rs = preparedStatement.executeQuery()) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from items where name = ?")) {
             preparedStatement.setString(1, key);
-            while (rs.next()) {
-                items.add(getItem(rs));
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    items.add(getItem(rs));
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find by name: " + key, e);
@@ -119,15 +126,16 @@ public class SqlTracker implements Store {
     @Override
     public Item findById(int id) {
         Item item = new Item();
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from items where id = ?");
-             ResultSet rs = preparedStatement.executeQuery()) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from items where id = ?")) {
             preparedStatement.setInt(1, id);
-            while (rs.next()) {
-                item = getItem(rs);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    return getItem(rs);
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find by id: " + id, e);
         }
-        return item;
+        return null;
     }
 }
