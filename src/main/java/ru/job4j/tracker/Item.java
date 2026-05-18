@@ -1,28 +1,24 @@
 package ru.job4j.tracker;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Objects;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "items")
 @Data
+@RequiredArgsConstructor
+@NoArgsConstructor
 public class Item {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MMMM-EEEE-yyyy HH:mm:ss");
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @NonNull
     private String name;
-
-    private LocalDateTime created = LocalDateTime.now().withNano(0);
-
-    public Item() {
-    }
-
-    public Item(String name) {
-        this.name = name;
-    }
-
-    public Item(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    private LocalDateTime created = LocalDateTime.now();
 }
